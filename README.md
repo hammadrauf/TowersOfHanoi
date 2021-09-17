@@ -4,6 +4,8 @@ It shows on screen a window with animated solution to Towers of Hanoi, optionall
 
 ##### Note: It uses Java Applets.
 
+![Screen capture of Output from Towers of Hanoi](https://github.com/hammadrauf/TowersOfHanoi/blob/main/binary-download/ScreenShot.png)
+
 ## Requirements
 - Java version 11
   - It uses deprecated JavaApplets. That has no ill effects other then the compiler giving warnings during compile time. Java Applets are deprecated and may not be supported in later versions of Java.
