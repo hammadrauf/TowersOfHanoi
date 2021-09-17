@@ -2,7 +2,7 @@
 It is an open source and free software. It can be used to teach the concept of "Recursion" to computer science students.
 
 ## Requirements
-Java version 11.
+* Java version 11
 It uses deprecated JavaApplets. That has no ill effects other then the compiler giving warnings during compile time.
 Java Applets are deprecated and may not be supported in later versions of Java.
 
@@ -25,6 +25,7 @@ Java Applets are deprecated and may not be supported in later versions of Java.
 				
 ## Usage Tips
 1. Open command prompt and type any of the following:
+
     C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 
     C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 -l true
     C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 -l true -s 20
