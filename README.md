@@ -4,7 +4,9 @@ It shows on screen a window with animated solution to Towers of Hanoi, optionall
 
 ##### Note: It uses Java Applets.
 
-![Screen capture of Output from Towers of Hanoi](https://github.com/hammadrauf/TowersOfHanoi/blob/main/binary-download/ScreenShot.png)
+![Screen capture 1 of Output from Towers of Hanoi](https://github.com/hammadrauf/TowersOfHanoi/blob/main/binary-download/ScreenShot.png)
+
+![Screen capture 2 of Output from Towers of Hanoi](https://github.com/hammadrauf/TowersOfHanoi/blob/main/binary-download/ScreenShot2.png)
 
 ## Requirements
 - Java version 11
