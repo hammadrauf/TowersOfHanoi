@@ -1,23 +1,24 @@
+/*
+* COPYRIGHT: HAMMAD RAUF
+* EMAIL: rauf.hammad@gmail.com
+* LICENSE: MIT (USE THIS HOWEVER YOU SEE FIT.)
+* DATE: 9/17/2021
+* VERSION: 1.0
+* 
+* THIS SOFTWARE HAS NO WARRANTY.  IF IT WORKS, SUPER.  IF IT DOESN'T, LET ME
+* KNOW AND I MIGHT OR MIGHT NOT DO SOMETHING ABOUT IT.
+*/
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static net.sourceforge.argparse4j.impl.Arguments.storeTrue;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author Hammad Rauf
- */
+
 public class Main {
 
     public static Main m_i;
@@ -41,7 +42,7 @@ public class Main {
                 .type(Integer.class)
                 .setDefault(0)
                 .help("slowness of animation. 0 or Higher. Default is 0");
-        parser.addArgument("-l","--Logging")
+        parser.addArgument("-l","--logging")
                 .dest("logging")
                 .type(Boolean.class)
                 .setDefault(false)
@@ -53,8 +54,6 @@ public class Main {
             parser.handleError(e);
             //System.exit(0);
         }        
-        
-        //m_i = new Main(8, 3, true);
     }
 
     public Main(int totalDisks, int animationSlowness, boolean doLogging ) {
@@ -65,9 +64,15 @@ public class Main {
         long timeElapsed = Duration.between(start, finish).toSeconds();
         if(doLogging)
             LOGGER.info("[TotalExecutionTime]: Hanoi Function - "+timeElapsed+" seconds.");
-        //t.logPoleData();
     }
 
+    /**
+     * Recursive towersOfHanoi method. Learning tip: Hide/delete this method if you want someone to learn to solve the classic problem.
+     * @param diskNo
+     * @param sourcePole
+     * @param destinationPole
+     * @param otherPole 
+     */
     public void towersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole) {
         boolean b = false;
         int storedDisk;

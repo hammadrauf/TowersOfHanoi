@@ -13,7 +13,11 @@
  *    .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)   .-./*)
  *  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/  _/___\/
  *    U U      U U      U U      U U      U U      U U      U U      U U
- */
+*/
+/*
+* Note: Some minor modification have been made in this file from the original version. - Hammad Rauf
+*/
+
 
 import java.awt.event.*;
 import javax.swing.*;

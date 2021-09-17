@@ -1,3 +1,10 @@
+/*
+* ### SoundUtils
+*	https://stackoverflow.com/a/6700039/4121347
+*	https://www.rgagnon.com/javadetails/java-0632.html
+*	AUTHOR: Real's HowTo
+*	LICENSE: Not specified. Code is available in public domain.
+*/
 
 import javax.sound.sampled.*;
 
