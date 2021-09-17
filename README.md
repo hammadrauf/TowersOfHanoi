@@ -34,3 +34,13 @@ C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 12 -s 3
 3. Close the Window frame to exit the application, otherwise it will keep on executing.
 4. You can Zoom in or out using the Mouse roller button.
 5. You can save the Window image in a JPEG/PNG/etc. file from File menu.
+
+## Building the Source Code
+1. You will need:
+  - Java Development Kit (JDK) version 11.
+  - Either one of:
+    - Apache Maven (Command line build), 
+    - Apache NetBeans IDE (GUI Builder), 
+    - Visual Studio Code (GUI Builder), Not tested by Author, OR
+    - IntelliJ IDEA (GUI Builder), Not tested by Author.
+2. Maven build tools should automatically get all binary dependencies and produce 2 jar files in "./target" folder.
