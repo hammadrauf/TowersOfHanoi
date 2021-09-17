@@ -17,6 +17,6 @@ nb-configuration.xml
 *.class
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.ear
