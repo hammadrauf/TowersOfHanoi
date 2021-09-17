@@ -1,5 +1,8 @@
 # Towers of Hanoi - A Simulation
 It is an open source and free software. It can be used to teach the concept of "Recursion" to computer science students.
+It shows on screen a window with animated solution to Towers of Hanoi, optionally can produce text output of all disk movements.
+
+##### Note: It uses Java Applets.
 
 ## Requirements
 - Java version 11
