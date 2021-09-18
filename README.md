@@ -46,6 +46,7 @@ java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
 ## Requirements
 - Java version 11
   - It uses deprecated JavaApplets. That has no ill effects other then the compiler giving warnings during compile time. Java Applets are deprecated and may not be supported in later versions of Java.
+- Tested Okay with Java (JDK) version 16.
 
 ## Getting Help on Usage
     C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar --help
