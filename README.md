@@ -4,6 +4,18 @@ It shows on screen a window with animated solution to Towers of Hanoi, optionall
 
 ##### Note: It uses Java Applets.
 
+## For Teachers and Students
+The code has been partitioned in easy to use classes. 
+Teachers/Students needing to focus on using this software as a simulation tool in Java for "Towers of Hanoi" problem,
+may just need to edit the class 'Main.java' only. In particular they may want to delete/edit/recreate the method 'Main.towersOfHanoi'.
+Some other useful methods are:
+
+- Main.java
+  - public void towersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole)
+- Towers.java
+  - public boolean moveSingleDisk(Pole fromPole, Pole toPole) throws Exception
+
+
 ## Screen Shots
 
 ![Screen capture 1 of Output from Towers of Hanoi](https://github.com/hammadrauf/TowersOfHanoi/blob/main/binary-download/ScreenShot.png)
@@ -52,6 +64,11 @@ C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 12 -s 3
   - Either one of:
     - Apache Maven (Command line build), 
     - Apache NetBeans IDE (GUI Builder), 
+	- Eclipse IDE (GUI Builder), Not tested by Author,
     - Visual Studio Code (GUI Builder), Not tested by Author, OR
     - IntelliJ IDEA (GUI Builder), Not tested by Author.
 2. Maven build tools should automatically get all binary dependencies and produce 2 jar files in "./target" folder.
+```
+mvn clean
+mvn package
+```
