@@ -25,7 +25,7 @@ cd TowersOfHanoi
 cd binary-download
 java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
 ```
-You can also download the binary file with CRUL or wget command.
+You can also download the binary file with 'curl' or 'wget' command.
 ```
 curl -H "Accept: application/zip" https://github.com/hammadrauf/TowersOfHanoi/tree/main/binary-download/TowersOfHanoi-1.0-jar-with-dependencies.jar -o TowersOfHanoi-1.0-jar-with-dependencies.jar
 OR
