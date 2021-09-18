@@ -10,7 +10,7 @@
 
 ## License Text
 ```
-Copyright (C) 2011-2021 The contributors: https://github.com/hammadrauf/TowersOfHanoi
+Copyright (C) 2011-2021 Hammad Rauf : https://github.com/hammadrauf/TowersOfHanoi
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation

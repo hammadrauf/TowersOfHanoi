@@ -1,6 +1,7 @@
 # Towers of Hanoi - A Simulation
-It is an open source and free software. It can be used to teach the concept of "Recursion" to computer science students.
-It shows on screen a window with animated solution to Towers of Hanoi, optionally can produce text output of all disk movements.
+It is an open source and free software. It can be used to teach the concept of "Recursion" or "Towers of Hanoi - Solutions" to computer science students.
+It shows on screen a window with animated solution to Towers of Hanoi, optionally can produce text output of all disk movements. Students can edit or modify
+the code according to their study objectives.
 
 ##### Note: It uses Java Applets.
 
@@ -14,6 +15,24 @@ Some other useful methods are:
   - public void towersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole)
 - Towers.java
   - public boolean moveSingleDisk(Pole fromPole, Pole toPole) throws Exception
+
+## Executable Binary JAR files
+Executable binary JAR file is included in ".binary-download" folder for convieniance. Download via Browser may corrupt this file. If the file is corrupted,
+ you can use GIT commands to copy the entire repository, using the command:
+```
+git clone https://github.com/hammadrauf/TowersOfHanoi.git
+cd TowersOfHanoi
+cd binary-download
+java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
+```
+You can also download the binary file with CRUL or wget command.
+```
+crul https://github.com/hammadrauf/TowersOfHanoi/tree/main/binary-download/TowersOfHanoi-1.0-jar-with-dependencies.jar
+OR
+wget https://github.com/hammadrauf/TowersOfHanoi/tree/main/binary-download/TowersOfHanoi-1.0-jar-with-dependencies.jar
+THEN
+java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
+```
 
 
 ## Screen Shots
