@@ -17,7 +17,7 @@ Some other useful methods are:
   - public boolean moveSingleDisk(Pole fromPole, Pole toPole) throws Exception
 
 ## Executable Binary JAR files
-Executable binary JAR file is included in ".binary-download" folder for convieniance. Download via Browser may corrupt this file. If the file is corrupted,
+Executable binary JAR file is included in ".binary-download" folder for convenience. Download via Browser may corrupt this file. If the file is corrupted,
  you can use GIT commands to copy the entire repository, using the command:
 ```
 git clone https://github.com/hammadrauf/TowersOfHanoi.git
