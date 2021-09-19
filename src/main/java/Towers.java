@@ -7,7 +7,7 @@
 * 
 * THIS SOFTWARE HAS NO WARRANTY.  IF IT WORKS, SUPER.  IF IT DOESN'T, LET ME
 * KNOW AND I MIGHT OR MIGHT NOT DO SOMETHING ABOUT IT.
-*/
+ */
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class Towers {
 
     private static Logger LOGGER = null;
     private boolean doLogging = false;
+    private boolean noBeeps = false;
     public static Turtle bob = null;
     private final int diskHeight = 5;
     private final int smallestDiskWidth = 15;
@@ -36,6 +37,9 @@ public class Towers {
     private ArrayList<String> allColors = new ArrayList<String>();
     private int maxDisks = 20;
     private int poleTopEmptySpace = maxDisks * 10;
+    private double validMoves = 0d;
+    private double invalidMoves = 0d;
+    private double totalMoves = 0d;
 
     public enum poleNumber {
         A, B, C
@@ -46,13 +50,14 @@ public class Towers {
     };
     public ArrayList<Pole> poles = new ArrayList<Pole>();
 
-    public Towers(int totalDisks, int animationSlowness, boolean isLoggingEnabled) {
+    public Towers(int totalDisks, int animationSlowness, boolean isLoggingEnabled, boolean beepNotNeeded) {
 
         System.setProperty("java.util.logging.SimpleFormatter.format",
                 "[%1$tF %1$tT] [%4$-7s] %5$s %n");
         LOGGER = Logger.getLogger(Towers.class.getName());
 
         this.doLogging = isLoggingEnabled;
+        this.noBeeps = beepNotNeeded;
         this.maxDisks = totalDisks;
         this.poleTopEmptySpace = maxDisks * 10;
 
@@ -132,6 +137,30 @@ public class Towers {
         }
     }
 
+    public double getTotalMoves() {
+        return this.totalMoves;
+    }
+
+    public double getValidMoves() {
+        return this.validMoves;
+    }
+
+    public double getInvalidMoves() {
+        return this.invalidMoves;
+    }
+
+    /**
+     * *
+     * Move a Single Disk from fromPole to toPole. Throws exception if Sound
+     * beep (speaker) issue or memory outage. Returns true if move is
+     * successful. Returns false if invalid move, also plays a beep if beep is
+     * enabled.
+     *
+     * @param fromPole
+     * @param toPole
+     * @return
+     * @throws Exception
+     */
     public boolean moveSingleDisk(Pole fromPole, Pole toPole) throws Exception {
         boolean retValue = false;
         Integer sourceDiskNo = fromPole.getPoleStack().peek();
@@ -140,12 +169,18 @@ public class Towers {
             if (destDiskNo != null) {
                 if (destDiskNo.intValue() >= sourceDiskNo.intValue()) {
                     retValue = false;
+                    invalidMoves++;
+                    totalMoves++;
                     if (this.doLogging) {
                         LOGGER.info("[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " is not smaller then Disk-" + destDiskNo.intValue() + ".");
                     }
-                    SoundUtils.tone(1000, 100);
+                    if (!noBeeps) {
+                        SoundUtils.tone(1000, 100);
+                    }
                 } else {
                     retValue = true;
+                    validMoves++;
+                    totalMoves++;
                     this.anytimeDisksErase(fromPole, fromPole.getPoleStack().peek().intValue());
                     sourceDiskNo = fromPole.getPoleStack().pop();
                     toPole.getPoleStack().push(sourceDiskNo);
@@ -156,6 +191,8 @@ public class Towers {
                 }
             } else {
                 retValue = true;
+                validMoves++;
+                totalMoves++;
                 this.anytimeDisksErase(fromPole, fromPole.getPoleStack().peek().intValue());
                 sourceDiskNo = fromPole.getPoleStack().pop();
                 toPole.getPoleStack().push(sourceDiskNo);
@@ -166,10 +203,44 @@ public class Towers {
             }
         } else {
             retValue = false;
+            invalidMoves++;
+            totalMoves++;
             if (this.doLogging) {
                 LOGGER.info("[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". No Disk available on Pole to move.");
             }
-            SoundUtils.tone(1000, 100);
+            if (!noBeeps) {
+                SoundUtils.tone(1000, 100);
+            }
+        }
+        return retValue;
+    }
+
+    /**
+     * *
+     * Used to verify that the "Towers Of Hanoi" problem has been solved.
+     * Returns true is all disks are present on the given pole parameter "p".
+     *
+     * @param p
+     * @param totalDisks
+     * @return
+     */
+    public boolean isPoleAllDiskMoved(Pole p, int totalDisks) {
+        boolean retValue = false;
+        if (p.pStack.size() == totalDisks) {
+            int dCounter = totalDisks;
+            for (int pdisk : p.pStack) {
+                if (pdisk == dCounter) {
+                    dCounter--;
+                    if (dCounter < 1) {
+                        retValue = true;
+                    }
+                } else {
+                    retValue = false;
+                    break;
+                }
+            }
+        } else {
+            retValue = false;
         }
         return retValue;
     }

@@ -12,9 +12,15 @@ may just need to edit the class 'Main.java' only. In particular they may want to
 Some other useful methods are:
 
 - Main.java
-  - public void towersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole)
+  - public void recursiveTowersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole)
+    - Recursive towersOfHanoi method. Learning tip: Hide/delete this method if you want someone to learn to solve the classic problem.
+  - public void iterativeTowersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole)
+    - Iterative towersOfHanoi method. Learning tip: Hide/delete this method if you want someone to learn to solve the classic problem.
 - Towers.java
   - public boolean moveSingleDisk(Pole fromPole, Pole toPole) throws Exception
+    - Move a Single Disk from fromPole to toPole. Throws exception if Sound beep (speaker) issue or memory outage. Returns true if move is successful. Returns false if invalid move, also plays a beep if beep is enabled.
+  - public boolean isPoleAllDiskMoved(Pole p, int totalDisks)
+    - Used to verify that the "Towers Of Hanoi" problem has been solved. Returns true is all disks are present on the given pole parameter "p".
 
 ## Executable Binary JAR files
 Executable binary JAR file is included in "./binary-download" folder for convenience. Download via Browser may corrupt this file. If the file is corrupted,
@@ -49,10 +55,12 @@ java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
 - Tested Okay with Java (JDK) version 16.
 
 ## Getting Help on Usage
-    C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar --help
-    usage: towersofhanoi [-h] [-s SLOWNESS] [-l {true,false}] N
+    C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar -h
+    usage: towersofhanoi [-h] [-s SLOWNESS] [-l {true,false}] [-i {true,false}]
+                         [-n {true,false}] N
     
-    Perform "Towers of Hanoi" simulation for given inputs, recursivley.
+    Perform  "Towers  of  Hanoi"  simulation   for  given  inputs,  recursivley
+    (default) or iteratively.
     
     positional arguments:
       N                      number of disks to move from tower. 1 or Higher.
@@ -64,7 +72,13 @@ java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
       -l {true,false}, --logging {true,false}
                              set  if  text  ouput   log  messages  are  needed.
                              Boolean value. Default is false.
-				
+      -i {true,false}, --iterative {true,false}
+                             set if iterative method  is needed. Boolean value.
+                             Default is false.
+      -n {true,false}, --nobeep {true,false}
+                             set if silent mode  (no  beep)  is needed. Boolean
+                             value. Default is false (There will be beeps).
+
 ## Usage Tips
 1. Open command prompt and type any of the following:
 ```

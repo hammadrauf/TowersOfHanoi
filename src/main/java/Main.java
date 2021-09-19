@@ -7,7 +7,7 @@
 * 
 * THIS SOFTWARE HAS NO WARRANTY.  IF IT WORKS, SUPER.  IF IT DOESN'T, LET ME
 * KNOW AND I MIGHT OR MIGHT NOT DO SOMETHING ABOUT IT.
-*/
+ */
 
 import java.time.Duration;
 import java.time.Instant;
@@ -17,7 +17,6 @@ import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
-
 
 public class Main {
 
@@ -29,15 +28,15 @@ public class Main {
         System.setProperty("java.util.logging.SimpleFormatter.format",
                 "[%1$tF %1$tT] [%4$-7s] %5$s %n");
         LOGGER = Logger.getLogger(Main.class.getName());
-                      
+
         ArgumentParser parser = ArgumentParsers.newFor("towersofhanoi").build()
-                .description("Perform \"Towers of Hanoi\" simulation for given inputs, recursivley.");
+                .description("Perform \"Towers of Hanoi\" simulation for given inputs, recursivley (default) or iteratively.");
         parser.addArgument("count_disks")
                 .metavar("N")
                 .type(Integer.class)
                 .required(true)
                 .help("number of disks to move from tower. 1 or Higher.");
-        parser.addArgument("-s","--slowness")
+        parser.addArgument("-s", "--slowness")
                 .dest("slowness")
                 .type(Integer.class)
                 .setDefault(0)
@@ -46,34 +45,62 @@ public class Main {
                 .dest("logging")
                 .type(Boolean.class)
                 .setDefault(false)
-                .help("set if text ouput log messages are needed. Boolean value. Default is false.");
+                .help("set if text ouput log messages are needed. Boolean value. Default is false.");        
+        parser.addArgument("-i", "--iterative")
+                .dest("iterate")
+                .type(Boolean.class)
+                .setDefault(false)
+                .help("set if iterative method is needed. Boolean value. Default is false.");
+        parser.addArgument("-n", "--nobeep")
+                .dest("noBeep")
+                .type(Boolean.class)
+                .setDefault(false)
+                .help("set if silent mode (no beep) is needed. Boolean value. Default is false (There will be beeps).");
         try {
             Namespace res = parser.parseArgs(args);
-            m_i = new Main(res.get("count_disks"), res.get("slowness"), res.get("logging"));
+            m_i = new Main(res.get("count_disks"), res.get("slowness"), res.get("logging"), res.get("iterate"), res.get("noBeep"));
         } catch (ArgumentParserException e) {
             parser.handleError(e);
             //System.exit(0);
-        }        
+        }
     }
 
-    public Main(int totalDisks, int animationSlowness, boolean doLogging ) {
-        t = new Towers(totalDisks, animationSlowness, doLogging);
+    public Main(int totalDisks, int animationSlowness, boolean doLogging, boolean iterative, boolean nobeeps) {
+        t = new Towers(totalDisks, animationSlowness, doLogging, nobeeps);
         Instant start = Instant.now();
-        towersOfHanoi(totalDisks, t.poles.get(0), t.poles.get(2), t.poles.get(1));
+        if (!iterative) {
+            if (doLogging) {
+                LOGGER.info("[StartExecution]: Hanoi Function - Recursive.");
+            }
+            recursiveTowersOfHanoi(totalDisks, t.poles.get(0), t.poles.get(2), t.poles.get(1));
+        } else {
+            if (doLogging) {
+                LOGGER.info("[StartExecution]: Hanoi Function - Iterative.");
+            }
+            iterativeTowersOfHanoi(totalDisks, t.poles.get(0), t.poles.get(2), t.poles.get(1));
+        }
         Instant finish = Instant.now();
         long timeElapsed = Duration.between(start, finish).toSeconds();
-        if(doLogging)
-            LOGGER.info("[TotalExecutionTime]: Hanoi Function - "+timeElapsed+" seconds.");
+        if (doLogging) {
+            LOGGER.info("[TotalExecutionTime]: Hanoi Function - " + timeElapsed + " seconds.");
+            LOGGER.info("[TaskCompletedCheck]: Pole C: " + t.isPoleAllDiskMoved(t.poles.get(2), totalDisks));
+            LOGGER.info("[TotalMoves]: Total Moves: " + t.getTotalMoves());
+            LOGGER.info("[ValidMoves]: Valid Moves: " + t.getValidMoves());
+            LOGGER.info("[InvalidMoves]: Invalid Moves: " + t.getInvalidMoves());            
+        }
     }
 
     /**
-     * Recursive towersOfHanoi method. Learning tip: Hide/delete this method if you want someone to learn to solve the classic problem.
+     * *
+     * Recursive towersOfHanoi method. Learning tip: Hide/delete this method if
+     * you want someone to learn to solve the classic problem.
+     *
      * @param diskNo
      * @param sourcePole
      * @param destinationPole
-     * @param otherPole 
+     * @param otherPole
      */
-    public void towersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole) {
+    public void recursiveTowersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole) {
         boolean b = false;
         int storedDisk;
         try {
@@ -93,14 +120,93 @@ public class Main {
             if (diskNo > 2) {
                 storedDisk = diskNo;
                 diskNo--;
-                this.towersOfHanoi(diskNo, sourcePole, otherPole, destinationPole);
+                this.recursiveTowersOfHanoi(diskNo, sourcePole, otherPole, destinationPole);
                 b = t.moveSingleDisk(sourcePole, destinationPole);
-                this.towersOfHanoi(diskNo, otherPole, destinationPole, sourcePole);
+                this.recursiveTowersOfHanoi(diskNo, otherPole, destinationPole, sourcePole);
                 return;
             }
             return;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE,"Sound Beep Exception. Check your computer speaker.", ex);
+            LOGGER.log(Level.SEVERE, "Exception occured. Check your computer speaker. Maybe number of disks/moves is too many for your hardware.", ex);
+        }
+        return;
+    }
+
+    /**
+     * *
+     * Iterative towersOfHanoi method. Learning tip: Hide/delete this method if
+     * you want someone to learn to solve the classic problem.
+     *
+     * @param diskNo
+     * @param sourcePole
+     * @param destinationPole
+     * @param otherPole
+     */
+    public void iterativeTowersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole) {
+        boolean isEven = (diskNo % 2) == 0 ? true : false;
+        boolean b = false;
+        try {
+            if (isEven) {
+                do {
+                    //make the legal move between pegs A and B (in either direction),
+                    b = false;
+                    b = t.moveSingleDisk(sourcePole, otherPole);
+                    if (!b) {
+                        b = t.moveSingleDisk(otherPole, sourcePole);
+                    }
+
+                    //make the legal move between pegs A and C (in either direction)
+                    b = false;
+                    b = t.moveSingleDisk(sourcePole, destinationPole);
+                    if (t.isPoleAllDiskMoved(destinationPole, diskNo)) {
+                        break;
+                    }
+                    if (!b) {
+                        b = t.moveSingleDisk(destinationPole, sourcePole);
+                    }
+
+                    //make the legal move between pegs B and C (in either direction)
+                    b = false;
+                    b = t.moveSingleDisk(otherPole, destinationPole);
+                    if (t.isPoleAllDiskMoved(destinationPole, diskNo)) {
+                        break;
+                    }
+                    if (!b) {
+                        b = t.moveSingleDisk(destinationPole, otherPole);
+                    }
+                } while (!t.isPoleAllDiskMoved(destinationPole, diskNo));
+            } else {
+                do {
+                    //make the legal move between pegs A and C (in either direction)
+                    b = false;
+                    b = t.moveSingleDisk(sourcePole, destinationPole);
+                    if (t.isPoleAllDiskMoved(destinationPole, diskNo)) {
+                        break;
+                    }
+                    if (!b) {
+                        b = t.moveSingleDisk(destinationPole, sourcePole);
+                    }
+
+                    //make the legal move between pegs A and B (in either direction)
+                    b = false;
+                    b = t.moveSingleDisk(sourcePole, otherPole);
+                    if (!b) {
+                        b = t.moveSingleDisk(otherPole, sourcePole);
+                    }
+
+                    //make the legal move between pegs B and C (in either direction)
+                    b = false;
+                    b = t.moveSingleDisk(otherPole, destinationPole);
+                    if (t.isPoleAllDiskMoved(destinationPole, diskNo)) {
+                        break;
+                    }
+                    if (!b) {
+                        b = t.moveSingleDisk(destinationPole, otherPole);
+                    }
+                } while (!t.isPoleAllDiskMoved(destinationPole, diskNo));
+            }
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Sound Beep Exception. Check your computer speaker.", ex);
         }
         return;
     }
