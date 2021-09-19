@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.awt.Point;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -172,7 +173,7 @@ public class Towers {
                     invalidMoves++;
                     totalMoves++;
                     if (this.doLogging) {
-                        LOGGER.info("[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " is not smaller then Disk-" + destDiskNo.intValue() + ".");
+                        LOGGER.info("[Next Significant Disk: "+this.getNextSignificantDisk()+"] " +"[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " is not smaller then Disk-" + destDiskNo.intValue() + ".");
                     }
                     if (!noBeeps) {
                         SoundUtils.tone(1000, 100);
@@ -186,7 +187,7 @@ public class Towers {
                     toPole.getPoleStack().push(sourceDiskNo);
                     this.anytimeDisksDraw(toPole, toPole.getPoleStack().peek().intValue());
                     if (this.doLogging) {
-                        LOGGER.info("[Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " moved.");
+                        LOGGER.info("[Next Significant Disk: "+this.getNextSignificantDisk()+"] " +"[Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " moved.");
                     }
                 }
             } else {
@@ -198,7 +199,7 @@ public class Towers {
                 toPole.getPoleStack().push(sourceDiskNo);
                 this.anytimeDisksDraw(toPole, toPole.getPoleStack().peek().intValue());
                 if (this.doLogging) {
-                    LOGGER.info("[Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " moved.");
+                    LOGGER.info("[Next Significant Disk: "+this.getNextSignificantDisk()+"] " +"[Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " moved.");
                 }
             }
         } else {
@@ -206,7 +207,7 @@ public class Towers {
             invalidMoves++;
             totalMoves++;
             if (this.doLogging) {
-                LOGGER.info("[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". No Disk available on Pole to move.");
+                LOGGER.info("[Next Significant Disk: "+this.getNextSignificantDisk()+"] " +"[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". No Disk available on Pole to move.");
             }
             if (!noBeeps) {
                 SoundUtils.tone(1000, 100);
@@ -241,6 +242,43 @@ public class Towers {
             }
         } else {
             retValue = false;
+        }
+        return retValue;
+    }
+
+
+    /***
+     * Gets the next significant disk number that is eligible for move on the
+     * Source pole. Significant disk refers to a top level disk that has so far
+     * not seen any movement itself. It returns 0 if there is no significant
+     * disk. Source pole should be correctly identified when creating poles.
+     * 
+     * @return 
+     */
+    private int getNextSignificantDisk() {
+        Pole sp = null;
+        for (Pole x : this.poles) {
+            if (x.getPoleType() == poleType.Source) {
+                sp = x;
+                break;
+            }
+        }
+        int retValue = 0;
+        if (sp.getPoleStack().size() < this.maxDisks) {
+            int lowerDisk = 0;
+            int upperDisk = 0;
+            var it = sp.getPoleStack().descendingIterator();
+            while (it.hasNext()) {
+                upperDisk = it.next();
+                if ((upperDisk - lowerDisk) != 1) {
+                    retValue = lowerDisk;
+                    break;
+                }
+                lowerDisk = upperDisk;
+            }
+            retValue = lowerDisk;
+        } else {
+            retValue = sp.getPoleStack().peek();
         }
         return retValue;
     }

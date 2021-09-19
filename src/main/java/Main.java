@@ -23,6 +23,7 @@ public class Main {
     public static Main m_i;
     public Towers t;
     private static Logger LOGGER = null;
+    private int slowness = 0;
 
     public static void main(String[] args) {
         System.setProperty("java.util.logging.SimpleFormatter.format",
@@ -41,11 +42,11 @@ public class Main {
                 .type(Integer.class)
                 .setDefault(0)
                 .help("slowness of animation. 0 or Higher. Default is 0");
-        parser.addArgument("-l","--logging")
+        parser.addArgument("-l", "--logging")
                 .dest("logging")
                 .type(Boolean.class)
                 .setDefault(false)
-                .help("set if text ouput log messages are needed. Boolean value. Default is false.");        
+                .help("set if text ouput log messages are needed. Boolean value. Default is false.");
         parser.addArgument("-i", "--iterative")
                 .dest("iterate")
                 .type(Boolean.class)
@@ -66,16 +67,19 @@ public class Main {
     }
 
     public Main(int totalDisks, int animationSlowness, boolean doLogging, boolean iterative, boolean nobeeps) {
-        t = new Towers(totalDisks, animationSlowness, doLogging, nobeeps);
+        this.slowness = animationSlowness;
+        t = new Towers(totalDisks, 0, doLogging, nobeeps);
         Instant start = Instant.now();
         if (!iterative) {
             if (doLogging) {
                 LOGGER.info("[StartExecution]: Hanoi Function - Recursive.");
+                LOGGER.info("[Next Significant Disk - Definition]: Top most disk that has not seen any movement.");
             }
             recursiveTowersOfHanoi(totalDisks, t.poles.get(0), t.poles.get(2), t.poles.get(1));
         } else {
             if (doLogging) {
                 LOGGER.info("[StartExecution]: Hanoi Function - Iterative.");
+                LOGGER.info("[Next Significant Disk - Definition]: Top most disk that has not seen any movement.");
             }
             iterativeTowersOfHanoi(totalDisks, t.poles.get(0), t.poles.get(2), t.poles.get(1));
         }
@@ -86,7 +90,7 @@ public class Main {
             LOGGER.info("[TaskCompletedCheck]: Pole C: " + t.isPoleAllDiskMoved(t.poles.get(2), totalDisks));
             LOGGER.info("[TotalMoves]: Total Moves: " + t.getTotalMoves());
             LOGGER.info("[ValidMoves]: Valid Moves: " + t.getValidMoves());
-            LOGGER.info("[InvalidMoves]: Invalid Moves: " + t.getInvalidMoves());            
+            LOGGER.info("[InvalidMoves]: Invalid Moves: " + t.getInvalidMoves());
         }
     }
 
@@ -102,7 +106,7 @@ public class Main {
      */
     public void recursiveTowersOfHanoi(int diskNo, Towers.Pole sourcePole, Towers.Pole destinationPole, Towers.Pole otherPole) {
         boolean b = false;
-        int storedDisk;
+        //int storedDisk;
         try {
             if (diskNo < 1) {
                 return;
@@ -118,10 +122,12 @@ public class Main {
                 return;
             }
             if (diskNo > 2) {
-                storedDisk = diskNo;
+                //storedDisk = diskNo;
                 diskNo--;
+                Thread.sleep(this.slowness);
                 this.recursiveTowersOfHanoi(diskNo, sourcePole, otherPole, destinationPole);
                 b = t.moveSingleDisk(sourcePole, destinationPole);
+                Thread.sleep(this.slowness);
                 this.recursiveTowersOfHanoi(diskNo, otherPole, destinationPole, sourcePole);
                 return;
             }
@@ -174,6 +180,7 @@ public class Main {
                     if (!b) {
                         b = t.moveSingleDisk(destinationPole, otherPole);
                     }
+                    Thread.sleep(this.slowness);
                 } while (!t.isPoleAllDiskMoved(destinationPole, diskNo));
             } else {
                 do {
@@ -203,10 +210,11 @@ public class Main {
                     if (!b) {
                         b = t.moveSingleDisk(destinationPole, otherPole);
                     }
+                    Thread.sleep(this.slowness);
                 } while (!t.isPoleAllDiskMoved(destinationPole, diskNo));
             }
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Sound Beep Exception. Check your computer speaker.", ex);
+            LOGGER.log(Level.SEVERE, "Exception occured. Check your computer speaker. Maybe number of disks/moves is too many for your hardware.", ex);
         }
         return;
     }
