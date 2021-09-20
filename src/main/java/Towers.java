@@ -41,6 +41,7 @@ public class Towers {
     private double validMoves = 0d;
     private double invalidMoves = 0d;
     private double totalMoves = 0d;
+    private boolean displayOff = false;
 
     public enum poleNumber {
         A, B, C
@@ -51,8 +52,7 @@ public class Towers {
     };
     public ArrayList<Pole> poles = new ArrayList<Pole>();
 
-    public Towers(int totalDisks, int animationSlowness, boolean isLoggingEnabled, boolean beepNotNeeded) {
-
+    public Towers(int totalDisks, int animationSlowness, boolean isLoggingEnabled, boolean beepNotNeeded, boolean displayOff) {
         System.setProperty("java.util.logging.SimpleFormatter.format",
                 "[%1$tF %1$tT] [%4$-7s] %5$s %n");
         LOGGER = Logger.getLogger(Towers.class.getName());
@@ -61,13 +61,19 @@ public class Towers {
         this.noBeeps = beepNotNeeded;
         this.maxDisks = totalDisks;
         this.poleTopEmptySpace = maxDisks * 10;
+        this.displayOff = displayOff;
+        if (displayOff) {
+            this.doLogging = true;
+        }
 
-        this.bob = new Turtle(0, 0);
-        bob.hide();
-        bob.speed(animationSlowness);
-        bgColor = bob.colors.get("white");
-        fgColor = bob.colors.get("black");
-        Turtle.colors.keySet().forEach(n -> allColors.add(n));
+        if (!displayOff) {
+            this.bob = new Turtle(0, 0);
+            bob.hide();
+            bob.speed(animationSlowness);
+            bgColor = bob.colors.get("white");
+            fgColor = bob.colors.get("black");
+            Turtle.colors.keySet().forEach(n -> allColors.add(n));
+        }
         poles.add(poleNumber.A.ordinal(), new Pole(poleNumber.A, false, poleType.Source));
         poles.add(poleNumber.B.ordinal(), new Pole(poleNumber.B, true, poleType.Other));
         poles.add(poleNumber.C.ordinal(), new Pole(poleNumber.C, true, poleType.Destination));
@@ -76,14 +82,15 @@ public class Towers {
     }
 
     private void doSetup() {
-        this.drawBoundingBox();
-        Point ppA = this.getPoleStartingPoint(poleNumber.A);
-        Point ppB = this.getPoleStartingPoint(poleNumber.B);
-        Point ppC = this.getPoleStartingPoint(poleNumber.C);
-        this.bob.showText("A", ppA.x, ppA.y - (this.diskGap + 14), 14);
-        this.bob.showText("B", ppB.x, ppB.y - (this.diskGap + 14), 14);
-        this.bob.showText("C", ppC.x, ppC.y - (this.diskGap + 14), 14);
-
+        if (!displayOff) {
+            this.drawBoundingBox();
+            Point ppA = this.getPoleStartingPoint(poleNumber.A);
+            Point ppB = this.getPoleStartingPoint(poleNumber.B);
+            Point ppC = this.getPoleStartingPoint(poleNumber.C);
+            this.bob.showText("A", ppA.x, ppA.y - (this.diskGap + 14), 14);
+            this.bob.showText("B", ppB.x, ppB.y - (this.diskGap + 14), 14);
+            this.bob.showText("C", ppC.x, ppC.y - (this.diskGap + 14), 14);
+        }
         for (Pole p : poles) {
             p.renderPole();
         }
@@ -131,7 +138,9 @@ public class Towers {
         public void renderPole() {
             if (!this.empty) {
                 for (int i = 1; i <= maxDisks; i++) {
-                    initialDisksDraw(this.pNumber, i);
+                    if (!displayOff) {
+                        initialDisksDraw(this.pNumber, i);
+                    }
                     pStack.push(i);
                 }
             }
@@ -173,7 +182,7 @@ public class Towers {
                     invalidMoves++;
                     totalMoves++;
                     if (this.doLogging) {
-                        LOGGER.info("[Next Significant Disk: "+this.getNextSignificantDisk()+"] " +"[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " is not smaller then Disk-" + destDiskNo.intValue() + ".");
+                        LOGGER.info("[Next Significant Disk: " + this.getNextSignificantDisk() + "] " + "[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " is not smaller then Disk-" + destDiskNo.intValue() + ".");
                     }
                     if (!noBeeps) {
                         SoundUtils.tone(1000, 100);
@@ -187,7 +196,7 @@ public class Towers {
                     toPole.getPoleStack().push(sourceDiskNo);
                     this.anytimeDisksDraw(toPole, toPole.getPoleStack().peek().intValue());
                     if (this.doLogging) {
-                        LOGGER.info("[Next Significant Disk: "+this.getNextSignificantDisk()+"] " +"[Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " moved.");
+                        LOGGER.info("[Next Significant Disk: " + this.getNextSignificantDisk() + "] " + "[Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " moved.");
                     }
                 }
             } else {
@@ -199,7 +208,7 @@ public class Towers {
                 toPole.getPoleStack().push(sourceDiskNo);
                 this.anytimeDisksDraw(toPole, toPole.getPoleStack().peek().intValue());
                 if (this.doLogging) {
-                    LOGGER.info("[Next Significant Disk: "+this.getNextSignificantDisk()+"] " +"[Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " moved.");
+                    LOGGER.info("[Next Significant Disk: " + this.getNextSignificantDisk() + "] " + "[Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". Disk-" + sourceDiskNo.intValue() + " moved.");
                 }
             }
         } else {
@@ -207,7 +216,7 @@ public class Towers {
             invalidMoves++;
             totalMoves++;
             if (this.doLogging) {
-                LOGGER.info("[Next Significant Disk: "+this.getNextSignificantDisk()+"] " +"[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". No Disk available on Pole to move.");
+                LOGGER.info("[Next Significant Disk: " + this.getNextSignificantDisk() + "] " + "[Invalid Move]: From Pole-" + fromPole.pNumber.toString() + " to Pole-" + toPole.pNumber.toString() + ". No Disk available on Pole to move.");
             }
             if (!noBeeps) {
                 SoundUtils.tone(1000, 100);
@@ -246,14 +255,14 @@ public class Towers {
         return retValue;
     }
 
-
-    /***
+    /**
+     * *
      * Gets the next significant disk number that is eligible for move on the
      * Source pole. Significant disk refers to a top level disk that has so far
      * not seen any movement itself. It returns 0 if there is no significant
      * disk. Source pole should be correctly identified when creating poles.
-     * 
-     * @return 
+     *
+     * @return
      */
     private int getNextSignificantDisk() {
         Pole sp = null;
@@ -284,14 +293,16 @@ public class Towers {
     }
 
     private void drawBoundingBox() {
-        int width = (3 * this.getDiskWidth(1)) + (4 * diskGap);
-        int height = (diskHeight * maxDisks) + (diskGap * (diskGap - 1)) + (poleTopEmptySpace * 2) + diskGap;
-        this.rectangle(0, tableTopOffset - diskGap, width, height, "black");
-        int n_width = ((width + width / 8) > max_screen_width) ? max_screen_width : (width + width / 8);
-        int n_height = ((height + height / 4) > max_screen_height) ? max_screen_height : (height + height / 4);
-        //bob.resizeWindow(n_width, n_height);
-        bob.resizeWindow(max_screen_width, max_screen_height);
-        Turtle.zoomFit();
+        if (!displayOff) {
+            int width = (3 * this.getDiskWidth(1)) + (4 * diskGap);
+            int height = (diskHeight * maxDisks) + (diskGap * (diskGap - 1)) + (poleTopEmptySpace * 2) + diskGap;
+            this.rectangle(0, tableTopOffset - diskGap, width, height, "black");
+            int n_width = ((width + width / 8) > max_screen_width) ? max_screen_width : (width + width / 8);
+            int n_height = ((height + height / 4) > max_screen_height) ? max_screen_height : (height + height / 4);
+            //bob.resizeWindow(n_width, n_height);
+            bob.resizeWindow(max_screen_width, max_screen_height);
+            Turtle.zoomFit();
+        }
     }
 
     private Point getPoleStartingPoint(poleNumber p) {
@@ -319,14 +330,16 @@ public class Towers {
     }
 
     private void initialDisksDraw(poleNumber p, int disk_no) {
-        Point pp = this.getPoleStartingPoint(p);
-        int x = pp.x;
-        int y = pp.y;
-        if (!(disk_no < 1) && !(disk_no > maxDisks)) {
-            int disk_width = this.getDiskWidth(disk_no);
-            int disk_y_offset = this.getDiskYOffset(disk_no);
+        if (!displayOff) {
+            Point pp = this.getPoleStartingPoint(p);
+            int x = pp.x;
+            int y = pp.y;
+            if (!(disk_no < 1) && !(disk_no > maxDisks)) {
+                int disk_width = this.getDiskWidth(disk_no);
+                int disk_y_offset = this.getDiskYOffset(disk_no);
 
-            this.rectangle(x, y + disk_y_offset, disk_width, diskHeight, "black");
+                this.rectangle(x, y + disk_y_offset, disk_width, diskHeight, "black");
+            }
         }
     }
 
@@ -391,27 +404,31 @@ public class Towers {
     }
 
     private void rectangle(double xpos, double ypos, double width, double height, String c) {
-        bob.up();
-        bob.penColor(c);
-        bob.setPosition(xpos - width / 2, ypos, 0);
-        bob.down();
-        bob.setPosition(xpos + width / 2, ypos, 90);
-        bob.setPosition(xpos + width / 2, ypos + height, 180);
-        bob.setPosition(xpos - width / 2, ypos + height, 270);
-        bob.setPosition(xpos - width / 2, ypos, 0);
+        if (!displayOff) {
+            bob.up();
+            bob.penColor(c);
+            bob.setPosition(xpos - width / 2, ypos, 0);
+            bob.down();
+            bob.setPosition(xpos + width / 2, ypos, 90);
+            bob.setPosition(xpos + width / 2, ypos + height, 180);
+            bob.setPosition(xpos - width / 2, ypos + height, 270);
+            bob.setPosition(xpos - width / 2, ypos, 0);
+        }
     }
 
     private void eraseRectangle(double xpos, double ypos, double width, double height) {
-        bob.up();
-        bob.penColor(this.bgColor);
-        bob.setPosition(xpos - width / 2, ypos, 0);
-        bob.penWidth = 3;
-        bob.down();
-        bob.setPosition(xpos + width / 2, ypos, 90);
-        bob.setPosition(xpos + width / 2, ypos + height, 180);
-        bob.setPosition(xpos - width / 2, ypos + height, 270);
-        bob.setPosition(xpos - width / 2, ypos, 0);
-        bob.penWidth = 2;
+        if (!displayOff) {
+            bob.up();
+            bob.penColor(this.bgColor);
+            bob.setPosition(xpos - width / 2, ypos, 0);
+            bob.penWidth = 3;
+            bob.down();
+            bob.setPosition(xpos + width / 2, ypos, 90);
+            bob.setPosition(xpos + width / 2, ypos + height, 180);
+            bob.setPosition(xpos - width / 2, ypos + height, 270);
+            bob.setPosition(xpos - width / 2, ypos, 0);
+            bob.penWidth = 2;
+        }
     }
 
 }

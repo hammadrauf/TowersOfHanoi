@@ -57,18 +57,25 @@ public class Main {
                 .type(Boolean.class)
                 .setDefault(false)
                 .help("set if silent mode (no beep) is needed. Boolean value. Default is false (There will be beeps).");
+        parser.addArgument("-d", "--displayoff")
+                .dest("displayOff")
+                .type(Boolean.class)
+                .setDefault(false)
+                .help("set if no GUI display is needed. Boolean value. Default is false (There will be display). Logging is enabled if this is set.");
         try {
             Namespace res = parser.parseArgs(args);
-            m_i = new Main(res.get("count_disks"), res.get("slowness"), res.get("logging"), res.get("iterate"), res.get("noBeep"));
+            m_i = new Main(res.get("count_disks"), res.get("slowness"), res.get("logging"), res.get("iterate"), res.get("noBeep"), res.get("displayOff"));
         } catch (ArgumentParserException e) {
             parser.handleError(e);
             //System.exit(0);
         }
     }
 
-    public Main(int totalDisks, int animationSlowness, boolean doLogging, boolean iterative, boolean nobeeps) {
+    public Main(int totalDisks, int animationSlowness, boolean doLogging, boolean iterative, boolean nobeeps, boolean displayOff) {
         this.slowness = animationSlowness;
-        t = new Towers(totalDisks, 0, doLogging, nobeeps);
+        if(displayOff)
+            doLogging = true;
+        t = new Towers(totalDisks, 0, doLogging, nobeeps, displayOff);
         Instant start = Instant.now();
         if (!iterative) {
             if (doLogging) {

@@ -57,7 +57,7 @@ java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
 ## Getting Help on Usage
     C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar -h
     usage: towersofhanoi [-h] [-s SLOWNESS] [-l {true,false}] [-i {true,false}]
-                         [-n {true,false}] N
+                         [-n {true,false}] [-d {true,false}] N
     
     Perform  "Towers  of  Hanoi"  simulation   for  given  inputs,  recursivley
     (default) or iteratively.
@@ -78,6 +78,10 @@ java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
       -n {true,false}, --nobeep {true,false}
                              set if silent mode  (no  beep)  is needed. Boolean
                              value. Default is false (There will be beeps).
+      -d {true,false}, --displayoff {true,false}
+                             set if no GUI  display  is  needed. Boolean value.
+                             Default is false (There  will be display). Logging
+                             is enabled if this is set.
 
 ## Usage Tips
 1. Open command prompt and type any of the following:
@@ -91,6 +95,19 @@ C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 12 -s 3
 3. Close the Window frame to exit the application, otherwise it will keep on executing.
 4. You can Zoom in or out using the Mouse roller button.
 5. You can save the Window image in a JPEG/PNG/etc. file from File menu.
+6. To use Iterative alogorithm instead of recursive, use switch "-i true"
+7. For really large number of disks (More than 20) you can either:
+  a. Use a slowness value in hundreds (for example 300).
+```
+C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -s 300 -l true
+C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -s 300 -l true -i true
+```
+  b. Turn-off the display.
+```
+C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -d true
+C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -d true -i true
+```
+8. To disable beep sound, on invalid moves, use switch "-n true"
 
 ## Building the Source Code
 1. You will need:
