@@ -86,10 +86,10 @@ java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 3
 ## Usage Tips
 1. Open command prompt and type any of the following:
 ```
-C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 
-C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 -l true
-C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 -l true -s 20
-C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 12 -s 3
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 -l true
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 6 -l true -s 20
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 12 -s 3
 ```	
 2. -l, --logging {true, false} option will log messages on the standard output (Console) by default.
 3. Close the Window frame to exit the application, otherwise it will keep on executing.
@@ -99,13 +99,13 @@ C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 12 -s 3
 7. For really large number of disks (More than 20) you can either:
   a. Use a slowness value in hundreds (for example 300).
 ```
-C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -s 300 -l true
-C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -s 300 -l true -i true
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -s 300 -l true
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -s 300 -l true -i true
 ```
   b. Turn-off the display.
 ```
-C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -d true
-C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -d true -i true
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -d true
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -d true -i true
 ```
 8. To disable beep sound, on invalid moves, use switch "-n true"
 
@@ -122,4 +122,28 @@ C:\>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -d true -i true
 ```
 mvn clean
 mvn package
+```
+
+## Iterative Versus Recursive Comparision
+Following is an extract of the final output from the program with displayOff switch enabled.
+```
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 20 -n true -i true -d true
+....
+[2021-09-19 21:16:24] [INFO   ] [Next Significant Disk: 0] [Move]: From Pole-B to Pole-C. Disk-20 moved.
+[2021-09-19 21:16:24] [INFO   ] [TotalExecutionTime]: Hanoi Function - 580 seconds.
+[2021-09-19 21:16:24] [INFO   ] [TaskCompletedCheck]: Pole C: true
+[2021-09-19 21:16:24] [INFO   ] [TotalMoves]: Total Moves: 1514595.0
+[2021-09-19 21:16:24] [INFO   ] [ValidMoves]: Valid Moves: 1048575.0
+[2021-09-19 21:16:24] [INFO   ] [InvalidMoves]: Invalid Moves: 466020.0
+
+
+
+C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 20 -n true -d true
+....
+[2021-09-19 21:23:32] [INFO   ] [Next Significant Disk: 0] [Move]: From Pole-B to Pole-C. Disk-20 moved.
+[2021-09-19 21:23:32] [INFO   ] [TotalExecutionTime]: Hanoi Function - 301 seconds.
+[2021-09-19 21:23:32] [INFO   ] [TaskCompletedCheck]: Pole C: true
+[2021-09-19 21:23:32] [INFO   ] [TotalMoves]: Total Moves: 1048575.0
+[2021-09-19 21:23:32] [INFO   ] [ValidMoves]: Valid Moves: 1048575.0
+[2021-09-19 21:23:32] [INFO   ] [InvalidMoves]: Invalid Moves: 0.0
 ```
