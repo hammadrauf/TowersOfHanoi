@@ -5,9 +5,7 @@
 * DATE: 9/17/2021
 * VERSION: 1.0
 * 
-* THIS SOFTWARE HAS NO WARRANTY.  IF IT WORKS, SUPER.  IF IT DOESN'T, LET ME
-* KNOW AND I MIGHT OR MIGHT NOT DO SOMETHING ABOUT IT.
- */
+*/
 
 import java.awt.Color;
 import java.util.ArrayList;
