@@ -97,6 +97,7 @@ C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependenci
 5. You can save the Window image in a JPEG/PNG/etc. file from File menu.
 6. To use Iterative alogorithm instead of recursive, use switch "-i true"
 7. For really large number of disks (More than 20) you can either:
+  
   a. Use a slowness value in hundreds (for example 300).
 ```
 C:\TowersOfHanoi\binary-download>java -jar TowersOfHanoi-1.0-jar-with-dependencies.jar 25 -s 300 -l true
